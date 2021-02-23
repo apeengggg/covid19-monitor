@@ -23,7 +23,129 @@ if (isset($_GET['action'])) {
         break;
 
         case 'cari':
-            echo 'cari';
+          include 'layout/header.php';
+          include 'layout/sidebar.php';
+          if(empty($status) AND empty($usia) AND empty($begin_date) AND empty($end_date)){
+              $query = mysqli_query($koneksi, "SELECT tsp.tgl_input, mp.kode_pasien, mp.usia, msp.status_pasien, msp.kode_status_pasien FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien ORDER BY tsp.tgl_input DESC");
+          }else{
+              $status          = htmlspecialchars($_POST['status_pasien']);
+              $usia            = htmlspecialchars($_POST['usia']);
+              $begin_date      = htmlspecialchars($_POST['begin_date']);
+              $end_date        = htmlspecialchars($_POST['end_date']);
+                    
+              if ($begin_date > $end_date) {
+                $tgl_begin  = date('d-m-y', strtotime($begin_date));
+                $tgl_end    = date('d-m-y', strtotime($end_date));
+                ?>
+                    <script type="text/javascript">
+                    window.alert(
+                      "Tanggal Awal Tidak Bisa Lebih Bersar Dari Tanggal Akhir, Yang Anda Pilih: Tanggal Awal = <?= $tgl_begin?> dan Tanggal Akhir <?=$tgl_end?>"
+                      );
+                    window.location = "pagging.php?module=pasien";
+                    </script>
+            <?php
+              }elseif($usia < 0){
+            ?>
+                  <script type="text/javascript">
+                  window.alert("Usia Tidak Bisa Di Masukan Dengan Angka Negatif!");
+                  window.location = "pagging.php?module=pasien";
+                  </script>
+                  <?php
+              } 
+              $query = mysqli_query($koneksi, "SELECT tsp.tgl_input, mp.kode_pasien, mp.usia, msp.status_pasien, msp.kode_status_pasien FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien WHERE mp.usia='$usia' AND msp.status_pasien='$status' AND (tsp.tgl_input BETWEEN '$begin_date' AND '$end_date') ORDER BY tsp.tgl_input DESC");
+          }
+     ?>
+
+<main class="ms-sm-auto col-10 px-md-2">
+  <a href="#addData" class="btn btn-md btn-dark mt-2">Tambah Data</a>
+  <a href="../assets/cetak.php" class="btn btn-md btn-dark mt-2">Download Rekap Data</a>
+  <h3 class="mt-2">Data Status Pasien</h3>
+  <table class="table table-bordered table-striped mt-2" id="tabel-data1">
+    <thead>
+      <th>Tanggal</th>
+      <th>No Pasien</th>
+      <th>Usia</th>
+      <th>Status</th>
+      <th>Action</th>
+    </thead>
+    <tbody>
+      <?php 
+            $no =1;
+            while ($data=mysqli_fetch_array($query)) {
+              $tgl = date('d-m-Y', strtotime($data['tgl_input']));
+            ?>
+      <tr>
+        <td width="10%"><?=$tgl?></td>
+        <td><?=$data['kode_pasien']?></td>
+        <td width="10%"><?=$data['usia']?></td>
+        <td width="10%"><?=$data['status_pasien']?></td>
+        <td width="10%">
+          <a href="?module=master_pasien&action=ubah">Edit</a>
+          <a href="?module=master_pasien&action=hapus">Hapus</a>
+        </td>
+      </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+  <form action="" method="post">
+    <div class="row">
+      <div class="col-7">
+        <fieldset class="border p-2">
+          <h3 id="addData">Tambah Data Status Pasien</h3>
+          <div class="mt-2 row">
+            <label for="tanggal_input" class="col-sm-2 col-form-label">Tanggal</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control mb-2" id="tanggal_input" name="tanggal_input"
+                value=<?=date('d-m-y')?> disabled>
+            </div>
+          </div>
+          <div class="mb-6 row">
+            <label for="nama" class="col-sm-2 col-form-label">No Pasien</label>
+            <div class="col-sm-10">
+              <select name="kode_pasien" id="kode_pasien" class="form-control mb-2" onchange='changeValue(this.value)'
+                required>
+                <option value="">Pilih No Pasien ...</option>
+                <?php 
+                      $a          = "var usia = new Array();\n;";
+                      while ($data=mysqli_fetch_array($pasien_not_exist)) {
+                        ?>
+                <option value="<?=$data['kode_pasien']?>">[<?=$data['kode_pasien']?>]-[<?=$data['nama']?>]</option>
+                <?php
+                        $a .= "usia['" . $data['kode_pasien'] . "'] = {usia:'" . addslashes($data['usia'])."'};\n"; 
+                      }
+                      ?>
+              </select>
+
+            </div>
+          </div>
+          <div class="mt-2 row">
+            <label for="usia" class="col-sm-2 col-form-label">Usia</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control mb-2" id="usia" name="usia" min="1" readonly>
+            </div>
+          </div>
+          <div class="mt-1 row">
+            <label for="usia" class="col-sm-2 col-form-label">Status Pasien</label>
+            <div class="col-sm-10">
+              <select name="kode_status" id="kode_status" class="form-control mb-2" required>
+                <option value="">Pilih Status Pasien ..</option>
+                <?php while ($jk = mysqli_fetch_array($status_pasien)) {
+                        ?>
+                <option value="<?=$jk['kode_status_pasien']?>"><?=$jk['status_pasien']?></option>
+                <?php } ?>
+              </select>
+              <small class="mt-1 mb-2"><b>*Jika Tidak Ada Data Pada No Pasien, Silahkan Tambah Data Pada Halaman Master
+                  Pasien</b> Atau <a href="pagging.php?module=master_pasien">Klik Disini</a></small><br>
+              <button type="submit" name="addstatuspasien" id="addstatuspasien" class="btn btn-md btn-dark mt-2">Tambah
+                Pasien</button>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </form>
+</main>
+<?php
         break;
     }
 }else{
@@ -42,7 +164,7 @@ if (isset($_GET['kd_pasien']) && isset($_GET['age'])) {
   <form action="" method="post">
     <div class="row">
       <div class="col-7">
-      <fieldset class="border p-2 mt-3">
+        <fieldset class="border p-2 mt-3">
           <h3>Tambah Data Status Pasien</h3>
           <div class="mb-6 row">
             <label for="tgl_input" class="col-sm-2 col-form-label">Tanggal</label>
@@ -113,7 +235,7 @@ if (isset($_GET['kd_pasien']) && isset($_GET['age'])) {
           <div class="mt-2 row">
             <label for="usia" class="col-sm-2 col-form-label">Usia</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control mb-2" id="usia" name="usia" min="1">
+              <input type="number" class="form-control mb-2" id="usia" name="usia" min="1">
             </div>
           </div>
           <div class="mt-2 row">
@@ -125,8 +247,9 @@ if (isset($_GET['kd_pasien']) && isset($_GET['age'])) {
               <input type="date" class="form-control mb-2" id="end_date" name="end_date">
             </div>
             <div class="col-sm-3">
-              <button type="submit" name="addstatuspasien" id="addstatuspasien" class="btn btn-md btn-dark">Cari
-                Data</button>
+              <a href="pagging.php?module=pasien&action=cari" type="submit" class="btn btn-md btn-dark">Cari Data</a>
+              <!-- <button type="submit" name="searchdatapasien" id="searchdatapasien" class="btn btn-md btn-dark">Cari
+                Data</button> -->
             </div>
           </div>
         </fieldset>
@@ -210,7 +333,8 @@ if (isset($_GET['kd_pasien']) && isset($_GET['age'])) {
                 <option value="<?=$jk['kode_status_pasien']?>"><?=$jk['status_pasien']?></option>
                 <?php } ?>
               </select>
-              <small class="mt-1 mb-2"><b>*Jika Tidak Ada Data Pada No Pasien, Silahkan Tambah Data Pada Halaman Master Pasien</b> Atau <a href="pagging.php?module=master_pasien">Klik Disini</a></small><br>
+              <small class="mt-1 mb-2"><b>*Jika Tidak Ada Data Pada No Pasien, Silahkan Tambah Data Pada Halaman Master
+                  Pasien</b> Atau <a href="pagging.php?module=master_pasien">Klik Disini</a></small><br>
               <button type="submit" name="addstatuspasien" id="addstatuspasien" class="btn btn-md btn-dark mt-2">Tambah
                 Pasien</button>
             </div>
@@ -228,9 +352,8 @@ if (isset($_GET['kd_pasien']) && isset($_GET['age'])) {
   echo $a; ? >
   function
   changeValue(id) {
-  document.getElementById('usia').value
-  =
-  usia[id].usia;
+    document.getElementById('usia').value =
+      usia[id].usia;
   };
 </script>
 <?php

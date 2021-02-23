@@ -2,10 +2,70 @@
 $koneksi = mysqli_connect('localhost', 'root', '', 'db_monitoring_covid19');
 date_default_timezone_set('Asia/Jakarta');
 
+function searchDataPasien($data){
+    $status     = htmlspecialchars($_POST['status_pasien']);
+    $usia       = htmlspecialchars($_POST['usia']);
+    $begin_date = htmlspecialchars($_POST['begin_date']);
+    $end_date   = htmlspecialchars($_POST['end_date']);
+
+    if ($begin_date > $end_date) {
+        $tgl_begin  = date('d-m-y', strtotime($begin_date));
+        $tgl_end    = date('d-m-y', strtotime($end_date));
+        ?>
+        <script type="text/javascript">
+			window.alert("Tanggal Awal Tidak Bisa Lebih Bersar Dari Tanggal Akhir, Yang Anda Pilih: Tanggal Awal = <?= $tgl_begin?> dan Tanggal Akhir <?=$tgl_end?>");
+			window.location="pagging.php?module=pasien";
+		</script>
+        <?php
+    }elseif($usia < 0){
+        ?>
+        <script type="text/javascript">
+			window.alert("Usia Tidak Bisa Di Masukan Dengan Angka Negatif!");
+			window.location="pagging.php?module=pasien";
+		</script>
+    <?php
+    }elseif($status=='' AND $usia=='' AND $begin_date=='' AND $end_date==''){
+        $query = mysqli_query($koneksi, "SELECT tsp.tgl_input, mp.kode_pasien, mp.usia, msp.status_pasien FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien ORDER BY tsp.tgl_input DESC");
+    }else{
+        $query = mysqli_query($koneksi, "SELECT tsp.tgl_input, mp.kode_pasien, mp.usia, msp.status_pasien FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien WHERE mp.usia='$usia' OR msp.status_pasien='$status' OR (tsp.tgl_input BETWEEN '$begin_date' AND '$end_date') ORDER BY tsp.tgl_input DESC");
+    }
+    return $query;
+}
+
+
 function editUser($data){
     global $koneksi;
 
+    $nama = htmlspecialchars($_POST['nama_user']);
+    $kode_status = htmlspecialchars($_POST['kode_su']);
+    $kode_user = htmlspecialchars($_POST['kode_user']);
+    if (!empty($_POST['password'])) {
+        $password = htmlspecialchars($_POST['password']);
+        $pwd = sha1($password);
+        $update = mysqli_query($koneksi, "UPDATE tb_user SET nama_user='$nama', kode_su='$kode_status', password='$pwd' WHERE kode_user='$kode_user'");
+    }else{
+        $update = mysqli_query($koneksi, "UPDATE tb_user SET nama_user='$nama', kode_su='$kode_status' WHERE kode_user='$kode_user'");
+    }
+    if ($update) {
+        ?>
+        <script type="text/javascript">
+			window.alert("Berhasil Mengubah Data User, Dengan Kode User: <?=$kode_user?>");
+			window.location="pagging.php?module=user";
+		</script>
+        <?php
+    }else{
+        ?>
+        <script type="text/javascript">
+			window.alert("Gagal Mengubah Data User, Dengan Kode User: <?=$kode_user?>");
+			window.location="pagging.php?module=user&action=ubah&kd_user=<?=$kode_user?>";
+		</script>
+        <?php
+    }
     
+    
+
+
+
 }
 
 function addUser($data){
@@ -24,7 +84,7 @@ function addUser($data){
     $add_new        = (int) substr($result_max_kode['max_kode'], 2,5);
     $add_new++;
     // initialize kode
-    $kode           = 'SU';
+    $kode           = 'US';
     // create new kode pasien
     $kode_pasien    = $kode.sprintf("%03s", $add_new);
 

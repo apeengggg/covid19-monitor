@@ -22,6 +22,12 @@ if (isset($_GET['action'])) {
       $kode = $_GET['kd_user'];
       $query = mysqli_query($koneksi, "SELECT * FROM tb_user INNER JOIN master_status_user ON tb_user.kode_su=master_status_user.kode_su WHERE tb_user.kode_user='$kode'");
       $result = mysqli_fetch_array($query);
+
+      if (isset($_POST['ubah'])) {
+          if ($_POST>0) {
+            editUser($_POST);
+          }
+      }
       include 'layout/header.php';
       include 'layout/sidebar.php';
         ?>
@@ -35,18 +41,19 @@ if (isset($_GET['action'])) {
             <label for="nama_user" class="col-sm-2 col-form-label">Nama</label>
             <div class="col-sm-10">
               <input type="text" class="form-control mb-2" id="nama_user" name="nama_user" value=<?=$result['nama_user']?>>
+              <input type="hidden" class="form-control mb-2" id="kode_user" name="kode_user" value=<?=$result['kode_user']?>>
             </div>
           </div>
           <div class="mt-2 row">
             <label for="username" class="col-sm-2 col-form-label">Username</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control mb-2" id="username" name="username" value=<?=$result['username']?>>
+              <input type="text" class="form-control mb-2" id="username" name="username" value=<?=$result['username']?> disabled>
             </div>
           </div>
           <div class="mt-2 row">
             <label for="password" class="col-sm-2 col-form-label">Password</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control mb-2" id="password" name="password">
+              <input type="text" class="form-control mb-2" id="password" name="password"">
             </div>
           </div>
           <div class="mt-1 row">
