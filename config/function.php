@@ -1,6 +1,7 @@
 <?php
 $koneksi = mysqli_connect('localhost', 'root', '', 'db_monitoring_covid19');
 date_default_timezone_set('Asia/Jakarta');
+session_start();
 
 function searchDataPasien($data){
     $status     = htmlspecialchars($_POST['status_pasien']);
