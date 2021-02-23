@@ -77,7 +77,7 @@
             'green'
             ],
             borderColor: '#transparent',
-            data: [<?=$result_age1['usia1']?>,<?=$result_age2['usia2']?>,<?=$result_age3['usia3']?>]
+            data: [<?=$result_age2['usia2']?>,<?=$result_age1['usia1']?>,<?=$result_age3['usia3']?>]
         }]
     },
 
