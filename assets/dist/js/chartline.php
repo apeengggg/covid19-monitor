@@ -1,3 +1,4 @@
+<script>
 var ctx = document.getElementById('myChart1');
 var chart = new Chart(ctx, {
     // The type of chart we want to create
@@ -29,3 +30,4 @@ var chart = new Chart(ctx, {
 }
 }
 });
+</script>
