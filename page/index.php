@@ -15,7 +15,7 @@ if (isset($_POST['login'])) {
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.80.0">
-    <title>Signin Template · Bootstrap v5.0</title>
+    <title>Monitoring COVID-19</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
     <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/dist/css/signin.css" rel="stylesheet">
@@ -40,6 +40,7 @@ if (isset($_POST['login'])) {
   <body class="text-center">
 
 <main class="form-signin">
+<?php $erorr = 'username / password salah';?>
   <form action="" method="post">
     <img src="https://pikobar.jabarprov.go.id/img/logo-relawan-covid.png" alt="" width="150" height="150">
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>

@@ -34,3 +34,4 @@
     </div>
 
 <?php require 'layout/footer.php';?>
+<?php include 'assets/charts.php';?>

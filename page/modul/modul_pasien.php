@@ -134,7 +134,7 @@ if (isset($_GET['kd_pasien']) && isset($_GET['age'])) {
     </div>
   </form>
   <a href="#addData" class="btn btn-md btn-dark mt-2">Tambah Data</a>
-  <a href="" class="btn btn-md btn-dark mt-2">Download Rekap Data</a>
+  <a href="../assets/cetak.php" class="btn btn-md btn-dark mt-2">Download Rekap Data</a>
   <h3 class="mt-2">Data Status Pasien</h3>
   <table class="table table-bordered table-striped mt-2" id="tabel-data1">
     <thead>
