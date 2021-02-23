@@ -2,6 +2,64 @@
 $koneksi = mysqli_connect('localhost', 'root', '', 'db_monitoring_covid19');
 date_default_timezone_set('Asia/Jakarta');
 
+function editUser($data){
+    global $koneksi;
+
+    
+}
+
+function addUser($data){
+    global $koneksi;
+    $nama = htmlspecialchars($_POST['nama_user']);
+    $username = htmlspecialchars($_POST['username']);
+    $password = htmlspecialchars($_POST['password']);
+    $kode_status = htmlspecialchars($_POST['kode_su']);
+    // echo $kode_status; die;
+    $pwd = sha1($password);
+
+    // get max kode pasien
+    $max_kode       = mysqli_query($koneksi, "SELECT max(kode_user) AS max_kode FROM tb_user") or die (mysqli_error($koneksi));
+    $result_max_kode= mysqli_fetch_array($max_kode);
+    // split kode pasien to number of kode pasien
+    $add_new        = (int) substr($result_max_kode['max_kode'], 2,5);
+    $add_new++;
+    // initialize kode
+    $kode           = 'SU';
+    // create new kode pasien
+    $kode_pasien    = $kode.sprintf("%03s", $add_new);
+
+    // cek
+    $query1 = mysqli_query($koneksi, "SELECT * FROM tb_user WHERE username='$username'");
+    // die;
+    if (mysqli_num_rows($query1)>0) {
+        ?>
+        <script type="text/javascript">
+			window.alert("Gagal Menambahkan Data User, Dengan Username: <?=$username?>, Username Sudah Terdaftar");
+			window.location="pagging.php?module=user";
+		</script>
+        <?php
+    }else{
+        // insert
+    $query2 = mysqli_query($koneksi, "INSERT INTO tb_user (kode_user, nama_user, username, password, kode_su) VALUES('$kode_pasien','$nama', '$username', '$pwd', '$kode_status')");
+    if ($query2) {
+        ?>
+        <script type="text/javascript">
+			window.alert("Berhasil Menambahkan Data User, Dengan Username: <?=$username?>");
+			window.location="pagging.php?module=user";
+		</script>
+        <?php
+    }else{
+        ?>
+        <script type="text/javascript">
+			window.alert("Gagal Menambahkan Data User, Dengan Username: <?=$username?>");
+			window.location="pagging.php?module=user";
+		</script>
+        <?php
+    }
+    }
+}
+
+
 function addPasien($data){
     global $koneksi;
     // get max kode pasien
