@@ -15,8 +15,79 @@ if (isset($_GET['action'])) {
     $action = $_GET['action'];
     switch ($action) {
     case 'ubah':
-        echo 'ubah';
+      include 'layout/header.php';
+      include 'layout/sidebar.php';
+
+      // ubah
+      if (isset($_POST['ubahstatuspasien'])) {
+          if ($_POST > 0) {
+              EditStatusPasien($_POST);
+          }
+      }
+
+      // get kode pasien form url
+      $kode = $_GET['no_pasien'];
+
+      // search with kode pasiend
+      $query = mysqli_query($koneksi, "SELECT * FROM tb_status_pasien tsp INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien WHERE tsp.kode_pasien='$kode'");
+      $data = mysqli_fetch_array($query);
+      ?>
+      <main class="ms-sm-auto col-10 px-md-2">
+      <form action="" method="post">
+      <div class="row">
+        <div class="col-7">
+          <fieldset class="border p-2">
+            <h3 id="addData">Ubah Data Status Pasien</h3>
+            <div class="mb-6 row">
+              <label for="nama" class="col-sm-2 col-form-label">No Pasien</label>
+              <div class="col-sm-10">
+                <input type="text" name="no_pasien" id="no_pasien" class="form-control" value="<?=$data['kode_pasien']?>" readonly>
+              </div>
+            </div>
+            <div class="mb-6 row">
+              <label for="nama" class="col-sm-2 col-form-label">Nama Pasien</label>
+              <div class="col-sm-10 mt-2">
+                <input type="text" name="nama" id="nama" class="form-control" value="<?=$data['nama']?>" disabled>
+              </div>
+            </div>
+            <div class="mt-2 row">
+              <label for="usia" class="col-sm-2 col-form-label">Usia</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control mb-2" id="usia" name="usia" min="1" value="<?=$data['usia']?>" readonly>
+              </div>
+            </div>
+            <div class="mt-1 row">
+              <label for="usia" class="col-sm-2 col-form-label">Status Pasien</label>
+              <div class="col-sm-10">
+                <select name="kode_status" id="kode_status" class="form-control mb-2" required>
+                  <option value="<?=$data['kode_status_pasien']?>"><?=$data['status_pasien']?></option>
+                  <?php while ($jk = mysqli_fetch_array($status_pasien)) {
+                          ?>
+                  <option value="<?=$jk['kode_status_pasien']?>"><?=$jk['status_pasien']?></option>
+                  <?php } ?>
+                </select>
+                <button type="submit" name="ubahstatuspasien" id="ubahstatuspasien" class="btn btn-md btn-dark mt-2">Ubah Status
+                  Pasien</button>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </form>
+</main>
+<?php
         break;
+
+        case 'hapus':
+          include 'layout/header.php';
+          include 'layout/sidebar.php';
+
+          if (isset($_GET['no_pasien'])) {
+              $kode = $_GET['no_pasien'];
+              HapusStatusPasien($kode);
+          }
+
+          break;
 
         case 'cari':
           include 'layout/header.php';
@@ -126,8 +197,8 @@ if (isset($_GET['action'])) {
           <td width="10%"><?=$data['usia']?></td>
           <td width="10%"><?=$data['status_pasien']?></td>
           <td width="10%">
-            <a href="?module=master_pasien&action=ubah">Edit</a>
-            <a href="?module=master_pasien&action=hapus">Hapus</a>
+            <a href="?module=pasien&action=ubah&no_pasien=<?=$data['kode_pasien']?>">Edit</a>
+            <a href="?module=pasien&action=hapus&no_pasien=<?=$data['kode_pasien']?>">Hapus</a>
           </td>
         </tr>
         <?php } ?>
@@ -346,8 +417,8 @@ if (isset($_GET['kd_pasien']) && isset($_GET['age'])) {
         <td width="10%"><?=$data['usia']?></td>
         <td width="10%"><?=$data['status_pasien']?></td>
         <td width="10%">
-          <a href="?module=master_pasien&action=ubah">Edit</a>
-          <a href="?module=master_pasien&action=hapus">Hapus</a>
+          <a href="?module=pasien&action=ubah&no_pasien=<?=$data['kode_pasien']?>">Edit</a>
+          <a href="?module=pasien&action=hapus&no_pasien=<?=$data['kode_pasien']?>">Hapus</a>
         </td>
       </tr>
       <?php } ?>

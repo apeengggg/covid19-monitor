@@ -4,8 +4,9 @@
 
 
   // hari
-$sql = mysqli_query($koneksi,"SELECT * FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien GROUP BY tsp.tgl_input ORDER BY tsp.tgl_input DESC LIMIT 0,7"); 
-$sql1 = mysqli_query($koneksi,"SELECT * FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien GROUP BY tsp.tgl_input ORDER BY tsp.tgl_input DESC LIMIT 0,7");        
+$sql = mysqli_query($koneksi,"SELECT * FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien GROUP BY tsp.tgl_input ORDER BY tsp.tgl_input ASC"); 
+$sql1 = mysqli_query($koneksi,"SELECT * FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien GROUP BY tsp.tgl_input ORDER BY tsp.tgl_input ASC");    
+    
 // while($data3 = mysqli_fetch_array($sql)){
 // $positifa = mysqli_query($koneksi,"SELECT COUNT(tsp.kode_pasien) as total, tgl_input FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien WHERE msp.status_pasien='Positif' AND tsp.tgl_input='$data3[tgl_input]'");
 // $p = mysqli_fetch_array($positifa);

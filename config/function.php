@@ -4,6 +4,56 @@ $koneksi = mysqli_connect('localhost', 'root', '', 'db_monitoring_covid19');
 date_default_timezone_set('Asia/Jakarta');
 session_start();
 
+function HapusStatusPasien($data){
+    global $koneksi;
+    $kode = $data;
+
+    // delete
+    $query= mysqli_query($koneksi, "DELETE FROM tb_status_pasien WHERE kode_pasien='$kode'");
+    if ($query) {
+        ?>
+        <script type="text/javascript">
+			window.alert("Berhasil Menghapus Data Status Pasien, Dengan Kode Pasien: <?=$kode?>");
+			window.location="pagging.php?module=pasien";
+		</script>
+        <?php
+    }else{
+        ?>
+        <script type="text/javascript">
+			window.alert("Gagal Menghapus Data Status Pasien, Dengan Kode Pasien: <?=$kode?>");
+			window.location="pagging.php?module=pasien";
+		</script>
+        <?php
+    }
+}
+
+
+function EditStatusPasien($data){
+    global $koneksi;
+
+    $status_baru = htmlspecialchars($_POST['kode_status']);
+    $kode_pasien = htmlspecialchars($_POST['no_pasien']);
+
+    // update
+    $query = mysqli_query($koneksi, "UPDATE tb_status_pasien SET kode_status_pasien='$status_baru' WHERE kode_pasien='$kode_pasien'");
+    if ($query) {
+        ?>
+        <script type="text/javascript">
+			window.alert("Berhasil Mengubah Data Status Pasien, Dengan Kode Pasien: <?=$kode_pasien?>");
+			window.location="pagging.php?module=pasien";
+		</script>
+        <?php
+    }else{
+        ?>
+        <script type="text/javascript">
+			window.alert("Gagal Mengubah Data Status Pasien, Dengan Kode Pasien: <?=$kode_pasien?>");
+			window.location="pagging.php?module=pasien";
+		</script>
+        <?php
+    }
+}
+
+
 function editUser($data){
     global $koneksi;
 
