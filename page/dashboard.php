@@ -13,8 +13,9 @@
         <div class="row">
             <div class="col-12">
                 <fieldset class="border p-2">
-                    <h5>Grafik 1</h5>
+                    <h5>Grafik Kasus Positif Berdasarkan Tanggal</h5>
                     <canvas id="myChart1"></canvas>
+                    
                 </fieldset>
             </div>
         </div>
@@ -22,14 +23,14 @@
         <div class="row">
             <div class="col-6">
                 <fieldset class="border p-2">
-                    <h5>Grafik 2</h5>
-                    <canvas id="myChart2" width="50%"></canvas>
+                    <h5>Grafik Kasus Positif Berdasarkan Usia</h5>
+                    <canvas id="myChart2" width="100%" height="100%"></canvas>
                 </fieldset>
             </div>
             <div class="col-6">
                 <fieldset class="border p-2">
-                    <h5>Grafik 3</h5>
-                    <canvas id="myChart3" width="50%"></canvas>
+                    <h5>Grafik Status Suspek</h5>
+                    <canvas id="myChart3" width="100%" height="100%"></canvas>
                 </fieldset>
             </div>
         </div>

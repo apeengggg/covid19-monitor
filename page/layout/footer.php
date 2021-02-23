@@ -25,4 +25,17 @@
       "pagingType": "full",
     });
   });
+  $(function () {
+    $('#tabel-data1').DataTable({
+     "dom": '<lf<t>ip>',
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": false,
+      "info": false,
+      "autoWidth": true,
+      "responsive": true,
+      "pagingType": "full",
+    });
+  });
 </script>

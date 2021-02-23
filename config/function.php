@@ -20,6 +20,17 @@ function addPasien($data){
     $jk             = htmlspecialchars($_POST['kode_jk']);
     $usia           = htmlspecialchars($_POST['usia']);
 
+    // check usia
+    if ($usia < 0) {
+        ?>
+        <script type="text/javascript">
+			window.alert("Gagal Menambahkan Data Pasien, Dengan Nama: <?=$nama?>, Usia Tidak Boleh Negatif!");
+			window.location="pagging.php?module=pasien&kd_pasien=<?=$kd_pasien?>&age=<?=$age?>";
+		</script>
+        <?php
+        die;
+    }
+
     // insert to db master_pasien
     $query          = mysqli_query($koneksi, "INSERT INTO master_pasien (kode_pasien, nama, kode_jk, 
                                         usia) VALUES 
