@@ -4,52 +4,6 @@ $koneksi = mysqli_connect('localhost', 'root', '', 'db_monitoring_covid19');
 date_default_timezone_set('Asia/Jakarta');
 session_start();
 
-function searchDataPasien($data){
-    $cond = "";
-        if (isset($_GET['status'])) {
-            $status = $_GET['status'];
-            if (!isset($_GET['usia'])) {
-                if (!isset($_GET['tgl']) AND (!isset($_GET['tgl_awal']) AND (!isset($_GET['tgl_akhir'])))) {
-                    $cond .= 'kode_status_pasien='."'".$status."'".' ';
-                }else{
-                    $cond .= 'kode_status_pasien='."'".$status."'".' OR ';
-                }
-            }else{
-                $cond .= 'kode_status_pasien='."'".$status."'".' OR ';
-            }
-            }else{
-                $cond .= ' ';
-            }
-            if (isset($_GET['usia'])) {
-                $usia = $_GET['usia'];
-                    if (!isset($_GET['tgl']) AND (!isset($_GET['tgl_awal']) AND (!isset($_GET['tgl_akhir'])))) {
-                        $cond .= 'usia='."'".$usia."'".' ';
-                    }else{
-                        $cond .= 'usia='."'".$usia."'".' OR ';
-                    }
-            }else{
-            }
-            if (isset($_GET['tgl'])) {
-                $tgl = $_GET['tgl'];
-                $cond .= 'tgl_input='."'".$tgl."'".' ';
-            }else{
-            }
-            if (isset($_GET['tgl_awal']) AND isset($_GET['tgl_akhir'])) {
-                $begin = $_GET['tgl_awal'];
-                $end = $_GET['tgl_akhir'];
-                $cond .= 'tgl_input BETWEEN '.$begin.' AND '.$end;
-            }else{
-            }
-
-            if (!isset($_GET['status']) AND !isset($_GET['usia']) AND !isset($_GET['tgl']) AND !isset($_GET['tgl_awal']) AND !isset($_GET['tgl_akhir'])) {
-                $query = "SELECT * FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien";
-            }else{
-                $query = "SELECT * FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien WHERE ".$cond;
-            }
-            return $query;
-}
-
-
 function editUser($data){
     global $koneksi;
 

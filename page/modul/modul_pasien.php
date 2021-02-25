@@ -39,12 +39,20 @@ if (isset($_GET['action'])) {
 
             if (isset($_GET['usia'])) {
                 $usia = $_GET['usia'];
+                if ($usia < 0) {
+                  ?>
+                <script type="text/javascript">
+                  window.alert("Usia Tidak Bisa Kurang Dari 0");
+                  window.location="pagging.php?module=pasien";
+                </script>
+        <?php
+                }else{
                         if (!isset($_GET['tgl']) AND (!isset($_GET['tgl_awal']) AND (!isset($_GET['tgl_akhir'])))) {
                             $cond .= 'mp.usia='."'".$usia."'".' ';
                         }else{
                             $cond .= 'mp.usia='."'".$usia."'".' AND ';
                         }
-                      
+                }
             }else{
               $cond .= ' ';
             }
