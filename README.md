@@ -21,7 +21,12 @@ Jika Semuanya Sudah Terinstall,
 4. Buka <b> localhost/phpmyadmin </b> pada browser yang ada gunakan <br>
 5. Buat Database baru dengan nama <b>db_monitoring_covid19</b>. Ingat nama harus sesuai, jika tidak maka sistem tidak akan berjalan <br>
 6. Import database yang ada pada folder <b>db</b> pada file sistem ini yang ada sudah download yang bernama : <b>db_monitoring_covid19.sql</b>
-7. Jika Semuanya Berhasil, anda dapat membuat <b>localhost/covid19-mon/</b> untuk dapat memulai menggunakan sistem ini
+7. Jika Semuanya Berhasil, anda dapat membuat <b>localhost/covid19-mon/</b> untuk dapat memulai menggunakan sistem ini <br><br><hr>
+
+> Tambah Pasien Pada Halaman Master Pasien, <br>
+> Setelah menambahkan maka akan redirect pada halaman data status pasien, <br>
+> Tambahkan Status Pasien Tersebut <br>
+> Selesai <br><br>
 
 <hr>
 <h1>Username  : superadmin</h1><br>
