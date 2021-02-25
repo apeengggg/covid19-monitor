@@ -20,7 +20,7 @@ if (isset($_GET['action'])) {
 
         case 'cari':
           include 'layout/header.php';
-          // include 'layout/sidebar.php';
+          include 'layout/sidebar.php';
           $cond = "";
         if (isset($_GET['status'])) {
             $status = $_GET['status'];
