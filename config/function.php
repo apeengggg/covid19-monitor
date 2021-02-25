@@ -1,36 +1,52 @@
 <?php
+error_reporting(0);
 $koneksi = mysqli_connect('localhost', 'root', '', 'db_monitoring_covid19');
 date_default_timezone_set('Asia/Jakarta');
 session_start();
 
 function searchDataPasien($data){
-    $status     = htmlspecialchars($_POST['status_pasien']);
-    $usia       = htmlspecialchars($_POST['usia']);
-    $begin_date = htmlspecialchars($_POST['begin_date']);
-    $end_date   = htmlspecialchars($_POST['end_date']);
+    $cond = "";
+        if (isset($_GET['status'])) {
+            $status = $_GET['status'];
+            if (!isset($_GET['usia'])) {
+                if (!isset($_GET['tgl']) AND (!isset($_GET['tgl_awal']) AND (!isset($_GET['tgl_akhir'])))) {
+                    $cond .= 'kode_status_pasien='."'".$status."'".' ';
+                }else{
+                    $cond .= 'kode_status_pasien='."'".$status."'".' OR ';
+                }
+            }else{
+                $cond .= 'kode_status_pasien='."'".$status."'".' OR ';
+            }
+            }else{
+                $cond .= ' ';
+            }
+            if (isset($_GET['usia'])) {
+                $usia = $_GET['usia'];
+                    if (!isset($_GET['tgl']) AND (!isset($_GET['tgl_awal']) AND (!isset($_GET['tgl_akhir'])))) {
+                        $cond .= 'usia='."'".$usia."'".' ';
+                    }else{
+                        $cond .= 'usia='."'".$usia."'".' OR ';
+                    }
+            }else{
+            }
+            if (isset($_GET['tgl'])) {
+                $tgl = $_GET['tgl'];
+                $cond .= 'tgl_input='."'".$tgl."'".' ';
+            }else{
+            }
+            if (isset($_GET['tgl_awal']) AND isset($_GET['tgl_akhir'])) {
+                $begin = $_GET['tgl_awal'];
+                $end = $_GET['tgl_akhir'];
+                $cond .= 'tgl_input BETWEEN '.$begin.' AND '.$end;
+            }else{
+            }
 
-    if ($begin_date > $end_date) {
-        $tgl_begin  = date('d-m-y', strtotime($begin_date));
-        $tgl_end    = date('d-m-y', strtotime($end_date));
-        ?>
-        <script type="text/javascript">
-			window.alert("Tanggal Awal Tidak Bisa Lebih Bersar Dari Tanggal Akhir, Yang Anda Pilih: Tanggal Awal = <?= $tgl_begin?> dan Tanggal Akhir <?=$tgl_end?>");
-			window.location="pagging.php?module=pasien";
-		</script>
-        <?php
-    }elseif($usia < 0){
-        ?>
-        <script type="text/javascript">
-			window.alert("Usia Tidak Bisa Di Masukan Dengan Angka Negatif!");
-			window.location="pagging.php?module=pasien";
-		</script>
-    <?php
-    }elseif($status=='' AND $usia=='' AND $begin_date=='' AND $end_date==''){
-        $query = mysqli_query($koneksi, "SELECT tsp.tgl_input, mp.kode_pasien, mp.usia, msp.status_pasien FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien ORDER BY tsp.tgl_input DESC");
-    }else{
-        $query = mysqli_query($koneksi, "SELECT tsp.tgl_input, mp.kode_pasien, mp.usia, msp.status_pasien FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien WHERE mp.usia='$usia' OR msp.status_pasien='$status' OR (tsp.tgl_input BETWEEN '$begin_date' AND '$end_date') ORDER BY tsp.tgl_input DESC");
-    }
-    return $query;
+            if (!isset($_GET['status']) AND !isset($_GET['usia']) AND !isset($_GET['tgl']) AND !isset($_GET['tgl_awal']) AND !isset($_GET['tgl_akhir'])) {
+                $query = "SELECT * FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien";
+            }else{
+                $query = "SELECT * FROM tb_status_pasien tsp INNER JOIN master_pasien mp ON tsp.kode_pasien=mp.kode_pasien INNER JOIN master_status_pasien msp ON tsp.kode_status_pasien=msp.kode_status_pasien WHERE ".$cond;
+            }
+            return $query;
 }
 
 
