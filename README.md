@@ -3,11 +3,12 @@
 <h1>Sistem Informasi Monitoring COVID-19</h1>
 <br>
 Syarat Penggunaan <br>
-1. Pastikan Versi PHP Anda 5 atau lebih, karena sistem ini menggunakan MySQLi atau anda bisa melakukan migrasi terlebih dahulu <br>
+1. Pastikan anda memiliki koneksi internet, karena beberapa gambar dan library menggunakan CDN <br>
+2. Pastikan Versi PHP Anda 5 atau lebih, karena sistem ini menggunakan MySQLi atau anda bisa melakukan migrasi terlebih dahulu <br>
    https://www.jagoanhosting.com/tutorial/uncategorized/tutorial-mengubah-script-mysql-menjadi-mysqli <br>
-2. Komputer anda sudah terinstall web server <br>
+3. Komputer anda sudah terinstall web server <br>
   https://www.dewaweb.com/blog/5-web-server-gratis-untuk-deployment-website/ <br>
-3. Komputer anda sudah terinstall database MySQL <br>
+4. Komputer anda sudah terinstall database MySQL <br>
   https://www.duniailkom.com/tutorial-mysql-download-install-dan-setingan-awal-mysql/ <br>
 
 Atau Komputer anda sudah terinstall package software yang sudah terdiri dari ketiga poin di atas seperti XAMPP, jangan lupa perhatikan verisi PHP! Anda Bisa mendownload nya disini <br>
