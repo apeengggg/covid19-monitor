@@ -6,9 +6,7 @@
 <body>
 
 	<center>
-
 		<h2>Rekapitulasi Data</h2>
-
 	</center>
 
 	<?php 
